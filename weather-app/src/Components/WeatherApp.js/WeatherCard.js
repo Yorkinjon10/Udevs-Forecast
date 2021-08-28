@@ -68,12 +68,25 @@ const data = [
   }
 ];
 export const Interface = () => {
+  const tashkent = 'https://api.weatherapi.com/v1/history.json?key=cd3e0034748b47568e854945212808&q=Tashkent&dt=2021-28-08';
+  const dayBackgroundImg = 'https://images.unsplash.com/photo-1592762943860-3da57d566f25?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80';
+  const nightBackgroundImg = 'https://live.staticflickr.com/5630/22261018373_1a6a44068c_b.jpg';
+  const beforeNightBackgroundImg = 'https://i2-prod.derbytelegraph.co.uk/incoming/article5366200.ece/ALTERNATES/s1200b/0_Hot-Air-Balloons-Flying-Over-Field-Against-Sky-During-Sunset.jpg';
+  const [backImg, setBackImg] = useState(dayBackgroundImg);
   const dateBuilder = (d) => {
     let days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday',
       'Friday', 'Saturday'];
     let day = days[d.getDay()];
     let date = d.getDate();
     let time = d.getHours() + ":" + d.getMinutes() + "  ";
+    if (time>= 6 && time < 15) {
+      setBackImg(dayBackgroundImg);
+    } else if (time >= 15 && time <= 18) {
+      setBackImg(beforeNightBackgroundImg);
+    }
+    else if (time >= 6 && time <= 1) {
+      setBackImg(nightBackgroundImg);
+    }
     return `${time} ${day} ${date}`
   }
 
@@ -81,7 +94,7 @@ export const Interface = () => {
   const [weather, setWeather] = useState({
     name: "Tashkent",
     main: { temp: 33.3, humidity: 12 },
-    wind: { speed: 3.84},
+    wind: { speed: 3.84, gust: 3.37 },
     weather: [
         {
           description: "Clear Sky"
@@ -89,23 +102,18 @@ export const Interface = () => {
       ]
   });
   const search = async (el) => {
-    console.log(el);
     const dataJS = await fetchWeather(el);
-    console.log(dataJS);
     setWeather(dataJS);
+    // if (dataJS.main.temp >= 30) {
+    //   setBackImg(beforeNightBackgroundImg);
+    // }
   }
 
-  console.log(weather.name);
-  const tashkent = 'https://api.weatherapi.com/v1/history.json?key=cd3e0034748b47568e854945212808&q=Tashkent&dt=2021-28-08';
-  const dayBackgroundImg = 'https://images.unsplash.com/photo-1592762943860-3da57d566f25?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80';
-  const nightBackgroundImg = 'https://live.staticflickr.com/5630/22261018373_1a6a44068c_b.jpg';
-  const beforeNightBackgroundImg = 'https://i2-prod.derbytelegraph.co.uk/incoming/article5366200.ece/ALTERNATES/s1200b/0_Hot-Air-Balloons-Flying-Over-Field-Against-Sky-During-Sunset.jpg';
   const [regions, setRegions] = useState(data);
   const [wordEntered, setWordEntered] = useState("");
   const getValuesOfInput = (event) => {
     const searchedWord = event.target.value;
     setWordEntered(searchedWord);
-    
     let newRegions = regions.filter((item) => {
       return item.regionName.toLocaleLowerCase().includes(searchedWord) });
     const searchedWord2 = event.target.value;
@@ -121,7 +129,7 @@ export const Interface = () => {
     <article className="card-wrapper">
       <section className="card">
         <section className="left-side">
-          <img className="left-side-img" src={dayBackgroundImg} alt="Sunny day" />          
+          <img className="left-side-img" src={backImg} alt="Sunny day" />          
           <p className="left-side-title">the.wheather</p>
           <section className="left-side-content">
             <p className="left-side-deg">{weather.main.temp}<span className="left-side-deg-circle"></span></p>
@@ -162,7 +170,7 @@ export const Interface = () => {
                 <li className="right-side-app-info">Cloudy<span className="right-side-app-measure"></span></li>
                 <li className="right-side-app-info">Humidity <span className="right-side-app-measure">{weather.main.humidity}%</span></li>
                 <li className="right-side-app-info">Wind <span className="right-side-app-measure">{weather.wind.speed} km/h</span></li>
-                <li className="right-side-app-info">Rain <span className="right-side-app-measure">0mm</span></li>
+                <li className="right-side-app-info">Rain <span className="right-side-app-measure">{weather.wind.gust} mm</span></li>
               </ul>
             </section>
           </section>
