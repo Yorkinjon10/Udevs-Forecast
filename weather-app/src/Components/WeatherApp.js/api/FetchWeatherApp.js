@@ -1,5 +1,5 @@
 // bde5bdc1df36f71bbb66c7c1331925ea
-// import React from 'react';
+
 import axios from 'axios';
 
 const URL = "https://api.openweathermap.org/data/2.5/weather";
@@ -16,12 +16,3 @@ export const fetchWeather = async (query) => {
 
     return data;
 }
- // name: "Tashkent",
-    // main: { temp: 33.3 },
-    // weather: {
-    //   [
-    //     {
-    //       description: "Clear Sky"
-    //     }
-    //   ]
-    // }
